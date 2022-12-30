@@ -1,8 +1,10 @@
-package com.example.library.studentlibrary.services;
+package com.driver.services;
 
-import com.example.library.studentlibrary.models.Book;
-import com.example.library.studentlibrary.models.Genre;
-import com.example.library.studentlibrary.repositories.BookRepository;
+import com.driver.models.Author;
+import com.driver.models.Book;
+import com.driver.models.Genre;
+import com.driver.repositories.AuthorRepository;
+import com.driver.repositories.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,13 +16,31 @@ public class BookService {
 
     @Autowired
     BookRepository bookRepository2;
+    @Autowired
+    AuthorRepository authorRepository;
 
     public void createBook(Book book){
-        bookRepository2.save(book);
+        int authorId =book.getAuthor().getId();
+        Author author = authorRepository.findById(authorId).get();
+        author.getBooksWritten().add(book);
+        book.setAuthor(author);
+        authorRepository.save(author);
     }
 
-    public List<Book> getBooks(String genre, boolean available, String author){
-        List<Book> books = null; //find the elements of the list by yourself
-        return books;
+    public List<Book> getBooks(String genre, boolean available, String author) {
+//
+        if (genre != null && author != null) {
+            return bookRepository2.findBooksByGenreAuthor(genre, author, available);
+        } else if (genre != null) {
+            return bookRepository2.findBooksByGenre(genre, available);
+        } else if (author != null) {
+            return bookRepository2.findBooksByAuthor(author, available);
+
+        } else {
+            return bookRepository2.findByAvailability(available);
+        }
     }
+
+
+
 }

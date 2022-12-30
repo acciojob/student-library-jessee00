@@ -1,13 +1,13 @@
-package com.example.library.studentlibrary.repositories;
+package com.driver.repositories;
 
-import com.example.library.studentlibrary.models.Card;
-import com.example.library.studentlibrary.models.CardStatus;
+import com.driver.models.Card;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
-
+@Repository
 public interface CardRepository extends JpaRepository<Card, Integer> {
 
     @Modifying
