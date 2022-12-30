@@ -1,12 +1,12 @@
-package com.driver.services;
+package com.example.library.studentlibrary.services;
 
-import com.driver.models.Card;
-import com.driver.models.Student;
-import com.driver.repositories.StudentRepository;
+import com.example.library.studentlibrary.models.Card;
+import com.example.library.studentlibrary.models.Student;
+import com.example.library.studentlibrary.repositories.StudentRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Date;
 
 @Service
 public class StudentService {
@@ -31,21 +31,22 @@ public class StudentService {
     }
 
     public void createStudent(Student student){
-         Card card=cardService4.createAndReturn(student);
 
-
-    }
-
-    public void updateStudent(Student student){
-
-       studentRepository4.updateStudentDetails(student);
-
+        Card  card = cardService4.createAndReturn(student);
+         student.setCard(card);
+        studentRepository4.save(student);
 
     }
 
-    public void deleteStudent(int id){
-        //Delete student and deactivate corresponding card
+    public void updateStudent(Student student)
+    {
+        studentRepository4.updateStudentDetails(student);
+    }
+
+    public void deleteStudent(int id)
+    {
+        studentRepository4.deleteCustom(id);
         cardService4.deactivateCard(id);
-          studentRepository4.deleteCustom(id);
+        //Delete student and deactivate corresponding card
     }
 }
